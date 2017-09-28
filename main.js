@@ -8,7 +8,7 @@
 	// iife standing in for real modules
 	const config = (function () {
 		return {
-			API_URL: 'http://taco-randomizer.herokuapp.com'
+			API_URL: 'https://taco-randomizer.herokuapp.com'
 		};
 	}());
 
