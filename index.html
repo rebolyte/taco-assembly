@@ -66,10 +66,6 @@
 					<app-item-selector name="Condiments" :items="condiments" @item-selected="setItem('Condiments', $event)" multiple="true"></app-item-selector>
 					<app-item-selector name="Seasonings" :items="seasonings" @item-selected="setItem('Seasonings', $event)" multiple="true"></app-item-selector>
 
-					<div class="is-size-3" v-if="orderValid">
-
-					</div>
-
 					<button type="button" class="button is-primary" :disabled="!orderValid" @click="addOrder">
 						Add
 					</button>
@@ -108,7 +104,7 @@
 <footer class="footer sticky-footer">
 	<div class="container">
 		<div class="content has-text-centered">
-			<p><strong>Taco assembler</strong>, built in 1 hour, &copy; 2017</p>
+			<p><strong>Taco assembler</strong>, built in 2.5 hours, &copy; rebolyte 2017</p>
 		</div>
 	</div>
 </footer>
