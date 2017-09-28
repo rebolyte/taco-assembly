@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="description" content="Make tacos in the browser!">
+	<meta name="keywords" content="taco, tacos, truck, austin">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Tacos!</title>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.5.3/css/bulma.min.css">
+	<style type="text/css">
+		[v-cloak] {
+		  display: none;
+		}
+		html {
+			position: relative;
+			min-height: 100%;
+		}
+		body {
+			/* margin bottom by footer height */
+			margin-bottom: 9rem;
+		}
+		.link {
+			text-decoration: underline;
+			cursor: pointer;
+		}
+		.sticky-footer {
+			position: absolute;
+			bottom: 0;
+			width: 100%;
+		}
+	</style>
+</head>
+<body>
+
+<nav class="nav has-shadow">
+	<div class="container">
+		<div class="nav-left">
+			<span class="nav-item"><strong>TACOS</strong></span>
+			<a class="nav-item is-tab" active-class="is-active">Home</a>
+			<a class="nav-item is-tab" active-class="is-active">Customize</a>
+			<a class="nav-item is-tab" active-class="is-active">Check out</a>
+		</div>
+		<div class="nav-right">
+			<a class="nav-item is-tab">Account</a>
+			<a class="nav-item is-tab">Log In</a>
+		</div>
+	</div>
+</nav>
+
+<section class="section">
+
+	<div class="container">
+
+		<h1 class="title">Taco Assembler!</h1>
+		<h2 class="subtitle">Choose your ingredients and then submit your order</h2>
+
+		
+		<div id="app" class="columns" v-cloak>
+
+			<div class="column is-two-thirds">
+				<div v-if="loading">Loading...</div>
+				<form>
+					<app-item-selector name="Shell" :items="shells" @item-selected="setItem('Shell', $event)"></app-item-selector>
+					<app-item-selector name="Base Layer" :items="baseLayers" @item-selected="setItem('BaseLayer', $event)"></app-item-selector>
+					<app-item-selector name="Mixins" :items="mixins" @item-selected="setItem('Mixins', $event)" multiple="true"></app-item-selector>
+					<app-item-selector name="Condiments" :items="condiments" @item-selected="setItem('Condiments', $event)" multiple="true"></app-item-selector>
+					<app-item-selector name="Seasonings" :items="seasonings" @item-selected="setItem('Seasonings', $event)" multiple="true"></app-item-selector>
+
+					<div class="is-size-3" v-if="orderValid">
+
+					</div>
+
+					<button type="button" class="button is-primary" :disabled="!orderValid" @click="addOrder">
+						Add
+					</button>
+				</form>
+			</div>
+
+			<div class="column">
+				<h3 class="subtitle">Your Order</h3>
+				<div class="tile is-ancestor">
+					<div class="tile is-vertical">
+						<app-order-display
+							v-for="order in orders"
+							:key="order.id"
+							:order="order"
+							:shells="shells" 
+							:base-layers="baseLayers"
+							:mixins="mixins"
+							:condiments="condiments"
+							:seasonings="seasonings"
+							@delete-order="deleteOrder">
+						</app-order-display>
+						<div class="tile is-child" v-if="orders.length === 0">
+							<p>Nothing yet!</p>
+						</div>
+					</div>
+				</div>
+				<button type="button" class="button is-primary" :disabled="orders.length === 0">Check Out</button>
+			</div>
+
+		</div>
+
+	</div>
+
+</section>
+
+<footer class="footer sticky-footer">
+	<div class="container">
+		<div class="content has-text-centered">
+			<p><strong>Taco assembler</strong>, built in 1 hour, &copy; 2017</p>
+		</div>
+	</div>
+</footer>
+
+
+<script>
+	// thanks @davidgilbertson
+	var scripts = [
+		'https://unpkg.com/vue@2.4.4/dist/vue.js',
+		'https://unpkg.com/axios@0.16.1/dist/axios.min.js',
+		'https://wzrd.in/standalone/nanoid@latest',
+		'main.js'
+	];
+	var newBrowser = (
+		'Promise' in window &&
+		'assign' in Object
+	);
+	if (!newBrowser) {
+		console.log('goddamnit IE...');
+		scripts.unshift(
+			'https://unpkg.com/es6-object-assign@1.1.0/dist/object-assign.min.js',
+			'https://unpkg.com/native-promise-only@0.8.1/lib/npo.src.js'
+		)
+	}
+	scripts.forEach(function (src) {
+		var scriptEl = document.createElement('script');
+		scriptEl.src = src;
+		// https://www.html5rocks.com/en/tutorials/speed/script-loading/
+		scriptEl.async = false;
+		document.head.appendChild(scriptEl);
+	});
+</script>
+
+</body>
+</html>
