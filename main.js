@@ -155,6 +155,22 @@
 		return arr.length === 0;
 	}
 
+	function getRandom(arr) {
+		return arr[Math.floor(arr.length * Math.random())];
+	}
+
+	function getRandoms(arr, len) {
+		let out = [];
+		while (len > 0) {
+			let rand = getRandom(arr);
+			if (!out.includes(rand)) {
+				out.push(rand);
+				len--;
+			}
+		}
+		return out;
+	}
+
 	let app = new Vue({
 		el: '#app',
 		data: {
@@ -226,6 +242,17 @@
 				let i = this.orders.find(o => o.id === id);
 				this.orders.splice(i, 1);
 				// this.reset() // doesn't currently work because of how we're handling multi-selects
+			},
+			addRandom() {
+				let pluckSlug = o => o.slug;
+				this.orders.push({
+					id: window.nanoid(),
+					shell: getRandom(this.shells).slug,
+					baseLayer: getRandom(this.baseLayers).slug,
+					mixins: getRandoms(this.mixins.map(pluckSlug), getRandom([1, 2])),
+					condiments: getRandoms(this.condiments.map(pluckSlug), getRandom([1, 2, 3])),
+					seasonings: getRandoms(this.seasonings.map(pluckSlug), getRandom([1, 2]))
+				});
 			},
 			reset() {
 				this.selectedShell = this.shells[0].slug;
